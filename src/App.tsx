@@ -4,12 +4,16 @@ import { SearchList } from "./components/search.tsx";
 import { Weather } from "./components/mainweather.tsx";
 import { Days } from "./components/info.tsx";
 import { Weeks } from "./components/week.tsx";
+import { Hour } from "./components/hours.tsx";
 function App() {
   return (
     <>
+    
       <Headline />
       <SearchList />
       <br></br>
+      <div className="float-left h-100% w-3/5">
+      
       <Weather
   city="Berlin"
   country="Germany"
@@ -67,6 +71,15 @@ function App() {
     first={24}
     second={15}
     name="fog"
+    />
+    </div>
+    </div>
+    <div className="float-left w-2/5">
+    <Hour 
+    name='snow'
+    hour={3}
+    stop={20}
+    
     />
     </div>
     </>

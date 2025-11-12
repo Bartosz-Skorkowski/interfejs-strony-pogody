@@ -7,7 +7,7 @@ type WeatherProps = {
 
 export function Weather({ city, country, temperature, dates }: WeatherProps) {
   return (
-    <div className="bg-[url('/src/assets/images/bg-today-large.svg')] w-3/5 bg-cover rounded-3xl flex justify-between h-[280px]">
+    <div className="bg-[url('/src/assets/images/bg-today-large.svg')]  bg-cover rounded-3xl flex justify-between h-[280px]">
       <div className="w-1/2 mt-30">
       
         <p className="font-bold text-xl ">
