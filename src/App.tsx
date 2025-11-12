@@ -75,13 +75,19 @@ function App() {
     </div>
     </div>
     <div className="float-left w-2/5">
-    <Hour 
-    name='snow'
-    hour={3}
-    stop={20}
-    
-    />
-    </div>
+  <Hour
+    data={[
+      { name: "snow", hour: 1, stop: -2 },
+      { name: "rain", hour: 2, stop: 3 },
+      { name: "sunny", hour: 3, stop: 5 },
+      { name: "overcast", hour: 4, stop: 4 },
+      { name: "storm", hour: 5, stop: 2 },
+      { name: "fog", hour: 6, stop: 1 },
+      { name: "sunny", hour: 7, stop: 6 },
+    ]}
+  />
+</div>
+
     </>
   );
 }
