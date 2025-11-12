@@ -7,12 +7,13 @@ import { Weeks } from "./components/week.tsx";
 import { Hour } from "./components/hours.tsx";
 function App() {
   return (
-    <>
+    <main className="flex flex-col justify-center max-w-7xl mx-auto">
     
       <Headline />
       <SearchList />
       <br></br>
-      <div className="float-left h-100% w-3/5">
+      <div className="flex flex-col md:flex-row">
+      <div className=" h-100% w-3/5">
       
       <Weather
   city="Berlin"
@@ -20,6 +21,7 @@ function App() {
   temperature={67}
   dates={new Date()}
 />
+<br></br>
     <Days 
     feel={18}
     hum={46}
@@ -40,7 +42,7 @@ function App() {
     wek="Wed"
     first={21}
     second={15}
-    name="dizzle"
+    name="drizzle"
     />
      <Weeks 
     wek="Thu"
@@ -74,21 +76,22 @@ function App() {
     />
     </div>
     </div>
-    <div className="float-left w-2/5">
+    <div className=" w-2/5">
   <Hour
     data={[
-      { name: "snow", hour: 1, stop: -2 },
-      { name: "rain", hour: 2, stop: 3 },
-      { name: "sunny", hour: 3, stop: 5 },
-      { name: "overcast", hour: 4, stop: 4 },
-      { name: "storm", hour: 5, stop: 2 },
-      { name: "fog", hour: 6, stop: 1 },
-      { name: "sunny", hour: 7, stop: 6 },
+      { name: "snow", hour: 3, stop: 20 },
+      { name: "rain", hour: 4, stop: 20 },
+      { name: "sunny", hour: 5, stop: 20 },
+      { name: "overcast", hour: 6, stop: 19 },
+      { name: "storm", hour: 7, stop: 18 },
+      { name: "fog", hour: 8, stop: 18 },
+      { name: "sunny", hour: 9, stop: 17 },
     ]}
   />
 </div>
+</div>
 
-    </>
+    </main>
   );
 }
 
