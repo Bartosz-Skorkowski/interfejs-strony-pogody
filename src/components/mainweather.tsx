@@ -7,17 +7,17 @@ type WeatherProps = {
 
 export function Weather({ city, country, temperature, dates }: WeatherProps) {
   return (
-    <div className="bg-[url('/src/assets/images/bg-today-large.svg')]  bg-cover rounded-3xl flex justify-between h-[280px]">
-      <div className="w-1/2 mt-30">
-      
-        <p className="font-bold text-xl ">
+    <div className="bg-[url('/src/assets/images/bg-today-large.svg')] bg-cover rounded-3xl flex justify-between h-[280px] p-6 text-white">
+      <div className="flex flex-col justify-center">
+        <p className="font-bold text-2xl">
           {city}, {country}
         </p>
         <p className="font-light text-gray-300">
           {dates.toDateString()}
         </p>
       </div>
-      <div className="w-1/2 flex items-center justify-end gap-2">
+
+      <div className="flex flex-col justify-center items-end">
         <img
           src="/src/assets/images/icon-sunny.webp"
           alt="Sunny"
