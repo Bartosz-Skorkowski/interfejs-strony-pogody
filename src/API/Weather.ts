@@ -1,18 +1,19 @@
-
 export async function getWeatherData(longitude: number, latitude: number) {
   const params = {
-    latitude,
-    longitude,
+    latitude: latitude,
+    longitude: longitude,
+    timezone: "auto",
+    forecast_days: 7,
+    current_weather: true, // dodajemy pobranie aktualnej pogody
     hourly: [
       "temperature_2m",
-      "weather_code",
-      "relative_humidity_2m",
-      "precipitation_probability",
+      "weathercode",
+      "relativehumidity_2m",
+      "windspeed_10m",
       "precipitation",
-      "wind_speed_10m",
+      "precipitation_probability",
     ],
-    daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
-    timezone: "auto",
+    daily: ["weathercode", "temperature_2m_max", "temperature_2m_min"],
   };
 
   const query = new URLSearchParams(params as any).toString();
@@ -30,18 +31,24 @@ export async function getWeatherData(longitude: number, latitude: number) {
   const dailyTimeArray = daily.time.map((t: string) => new Date(t));
 
   const weatherData = {
+    current: {
+      temperature: data.current_weather?.temperature,
+      weathercode: data.current_weather?.weathercode,
+      wind_speed: data.current_weather?.windspeed,
+      wind_direction: data.current_weather?.winddirection,
+    },
     hourly: {
       time: timeArray,
       temperature_2m: hourly.temperature_2m,
-      weather_code: hourly.weather_code,
-      relative_humidity_2m: hourly.relative_humidity_2m,
+      weathercode: hourly.weathercode,
+      relative_humidity_2m: hourly.relativehumidity_2m,
       precipitation_probability: hourly.precipitation_probability,
       precipitation: hourly.precipitation,
-      wind_speed_10m: hourly.wind_speed_10m,
+      wind_speed_10m: hourly.windspeed_10m,
     },
     daily: {
       time: dailyTimeArray,
-      weather_code: daily.weather_code,
+      weathercode: daily.weathercode,
       temperature_max: daily.temperature_2m_max,
       temperature_min: daily.temperature_2m_min,
     },
@@ -51,6 +58,5 @@ export async function getWeatherData(longitude: number, latitude: number) {
     timezone: data.timezone,
   };
 
-  console.log("Weather data fetched:", weatherData);
   return weatherData;
 }
