@@ -4,7 +4,14 @@ export async function getWeatherData(longitude: number, latitude: number) {
     longitude: longitude,
     timezone: "auto",
     forecast_days: 7,
-    current_weather: true, // dodajemy pobranie aktualnej pogody
+    current: [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "apparent_temperature",
+      "precipitation",
+      "weather_code",
+      "wind_speed_10m",
+    ],
     hourly: [
       "temperature_2m",
       "weathercode",
@@ -32,10 +39,13 @@ export async function getWeatherData(longitude: number, latitude: number) {
 
   const weatherData = {
     current: {
-      temperature: data.current_weather?.temperature,
-      weathercode: data.current_weather?.weathercode,
-      wind_speed: data.current_weather?.windspeed,
-      wind_direction: data.current_weather?.winddirection,
+      temperature: data.current?.temperature_2m,
+      weathercode: data.current?.weather_code,
+      wind_speed: data.current?.wind_speed_10m,
+      wind_direction: data.current?.winddirection,
+      precipitation: data.current?.precipitation,
+      apparent_temperature: data.current?.apparent_temperature,
+      relative_humidity_2m: data.current?.relative_humidity_2m,
     },
     hourly: {
       time: timeArray,

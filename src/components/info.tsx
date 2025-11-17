@@ -1,25 +1,27 @@
-import type { Units } from "./MenuBar.tsx";
-import { fToC, cToF, mphToKmh, kmhToMph, inToMm, mmToIn } from "./conventer.tsx";
+import { useUnitValue } from "../hooks/UseUnitValue.ts";
+import { UNIT_SIGN, useUnitContext } from "../context/UnitContext.tsx";
+
 
 type DayProps = {
   feel: number;
   hum: number;
   wind: number;
   pre: number;
-  units: Units;
+ 
 };
 
-export function Days({ feel, hum, wind, pre, units }: DayProps) {
-  const temp = units.temperatureUnit === "C" ? fToC(feel) : cToF(feel);
-  const windSpeed = units.windUnit === "kmh" ? mphToKmh(wind) : kmhToMph(wind);
-  const precipitation = units.precipitationUnit === "mm" ? inToMm(pre) : mmToIn(pre);
+export function Days({ feel, hum, wind, pre }: DayProps) {
+  const convertedTemperature = useUnitValue(feel, "temperature");
+   const convertedwind = useUnitValue(wind, "speed");
+    const convertedpercipitation = useUnitValue(pre, "distance");
+    const {unityTypes: {distance, speed, temperature}} = useUnitContext();
 
   return (
     <div className="flex gap-4">
       <div className="bg-gray-600 p-4 px-10 rounded-2xl w-1/4">
         <p className="font-light">Feels Like</p>
         <br />
-        <p className="font-mono text-2xl">{temp}°</p>
+        <p className="font-mono text-2xl">{convertedTemperature} {UNIT_SIGN.temperature[temperature]}</p>
       </div>
       <div className="bg-gray-600 p-4 px-10 rounded-2xl w-1/4">
         <p className="font-light">Humidity</p>
@@ -29,12 +31,12 @@ export function Days({ feel, hum, wind, pre, units }: DayProps) {
       <div className="bg-gray-600 p-4 px-10 rounded-2xl w-1/4">
         <p className="font-light">Wind</p>
         <br />
-        <p className="font-mono text-2xl">{windSpeed} {units.windUnit}</p>
+        <p className="font-mono text-2xl">{convertedwind.toFixed(3)} {UNIT_SIGN.speed[speed]}</p>
       </div>
       <div className="bg-gray-600 p-4 px-10 rounded-2xl w-1/4">
         <p className="font-light">Precipitation</p>
         <br />
-        <p className="font-mono text-2xl">{precipitation} {units.precipitationUnit}</p>
+        <p className="font-mono text-2xl">{convertedpercipitation} {UNIT_SIGN.distance[distance]}</p>
       </div>
     </div>
   );

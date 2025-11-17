@@ -1,6 +1,6 @@
 import "./index.css";
 import { Headline } from "./components/MenuBar";
-import type { Units } from "./components/MenuBar";
+
 import { SearchList } from "./components/search";
 import { Weather } from "./components/mainweather";
 import { Days } from "./components/info";
@@ -9,19 +9,11 @@ import { Hour } from "./components/hours";
 import { getWeatherData } from "./API/Weather";
 import { useEffect, useState } from "react";
 import { type CityLocation } from "./components/city";
-import { fToC, kmhToMph, cToF, inToMm, mmToIn } from "./components/conventer";
 
 function App() {
   const [weatherData, setWeatherData] = useState<any>(null);
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [selectedCity, setSelectedCity] = useState<CityLocation | null>(null);
-
-  const [units, setUnits] = useState<Units>({
-    temperatureUnit: "C",
-    windUnit: "kmh",
-    precipitationUnit: "mm",
-    isMetric: true,
-  });
 
   useEffect(() => {
     async function fetchData() {
@@ -54,56 +46,27 @@ function App() {
     hour: number;
     stop: number;
     date: string;
-  }> = hourly?.time
-    ?.map((time: Date, index: number) => ({
-      name: mapWeatherCodeToName(hourly.weathercode[index]),
-      hour: new Date(time).getHours(),
-      stop:
-        units.temperatureUnit === "C"
-          ? Math.round(hourly.temperature_2m[index])
-          : cToF(hourly.temperature_2m[index]),
-      date: new Date(time).toLocaleDateString("en-US", { weekday: "long" }),
-    }))
-    .filter((item) => item.date === selectedDay) || [];
+  }> =
+    hourly?.time
+      ?.map((time: Date, index: number) => ({
+        name: mapWeatherCodeToName(hourly.weathercode[index]),
+        hour: new Date(time).getHours(),
+        stop: hourly.temperature_2m[index],
+        date: new Date(time).toLocaleDateString("en-US", { weekday: "long" }),
+      }))
+      .filter((item) => item.date === selectedDay) || [];
 
   const dailyData = daily?.time?.map((date: Date, index: number) => ({
     dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
     weather: mapWeatherCodeToName(daily.weathercode[index]),
-    max:
-      units.temperatureUnit === "C"
-        ? Math.round(daily.temperature_max[index])
-        : cToF(daily.temperature_max[index]),
-    min:
-      units.temperatureUnit === "C"
-        ? Math.round(daily.temperature_min[index])
-        : cToF(daily.temperature_min[index]),
+    max: daily.temperature_max[index],
+
+    min: daily.temperature_min[index],
   }));
-
-  const convertTemp = (val: number) =>
-    units.temperatureUnit === "C" ? +val.toFixed(1) : cToF(val);
-
-  const convertWind = (val: number) =>
-    units.windUnit === "kmh" ? +val.toFixed(1) : kmhToMph(val);
-
-  const convertPrecip = (val: number) =>
-    units.precipitationUnit === "mm" ? +val.toFixed(2) : mmToIn(val);
-
-  const calculateFeelsLike = (tempC: number, windKmh: number) => {
-    if (tempC <= 10 && windKmh > 17.28) {
-     
-      return Math.round(
-        13.12 +
-          0.6215 * tempC -
-          11.37 * Math.pow(windKmh, 0.16) +
-          0.3965 * tempC * Math.pow(windKmh, 0.16)
-      );
-    }
-    return Math.round(tempC);
-  };
 
   return (
     <main className="flex flex-col justify-center max-w-7xl mx-auto">
-      <Headline onUnitsChange={setUnits} />
+      <Headline />
       <SearchList onCitySelect={setSelectedCity} />
       <br />
       {!weatherData || !hourly || !daily ? (
@@ -116,21 +79,15 @@ function App() {
             <Weather
               city={selectedCity?.name || "Berlin"}
               country={selectedCity?.country || "Germany"}
-              temperature={convertTemp(weatherData.current.temperature)}
+              temperature={weatherData.current.temperature}
               dates={new Date()}
             />
             <br />
             <Days
-              feel={convertTemp(
-                calculateFeelsLike(
-                  weatherData.current.temperature,
-                  weatherData.current.wind_speed
-                )
-              )}
-              hum={hourly.relative_humidity_2m[0]}
-              wind={convertWind(weatherData.current.wind_speed)}
-              pre={convertPrecip(hourly.precipitation_probability[0])}
-              units={units}
+              feel={weatherData.current.apparent_temperature}
+              hum={weatherData.current.relative_humidity_2m}
+              wind={weatherData.current.wind_speed}
+              pre={weatherData.current.precipitation}
             />
             <br />
             <p className="font-semibold mb-2">Daily forecast</p>

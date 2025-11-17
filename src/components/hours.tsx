@@ -1,3 +1,6 @@
+
+import { HInfo } from "./hourinfo";
+
 type HourData = {
   name: string;
   hour: number;
@@ -13,6 +16,7 @@ type HourProps = {
 };
 
 export function Hour({ data, selectedDay, onDayChange, daily }: HourProps) {
+  
   return (
     <div className="bg-gray-600 gap-2 rounded-xl ml-5 p-2">
       <div className="flex justify-between">
@@ -33,18 +37,13 @@ export function Hour({ data, selectedDay, onDayChange, daily }: HourProps) {
       <br />
       <div className="max-h-140 overflow-y-auto">
       {data.map((item, index) => (
-        <div
-          key={index}
-          className="bg-gray-700 rounded-2xl flex justify-between mb-2"
-        >
-          <img
-            src={`src/assets/images/icon-${item.name}.webp`}
-            alt={item.name}
-            className="size-20"
-          />
-          <p className="mr-auto my-auto">{item.hour} {item.hour >= 12 ? 'PM' : 'AM'}</p>
-          <p className="my-auto p-4">{item.stop}°</p>
-        </div>
+        <HInfo
+        hour={item.hour}
+        name={item.name}
+        temperature={item.stop}
+        key={item.date}
+
+        />
       ))}
       </div>
     </div>
